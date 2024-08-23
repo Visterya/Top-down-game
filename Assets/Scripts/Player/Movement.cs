@@ -8,26 +8,40 @@ public class Movement : MonoBehaviour
 
     private float _inputX;
     private float _inputY;
+    private Vector3 _change;
+
+    [Header("Components")]
     private Rigidbody2D _rb;
+    private Animator _animator;
 
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
+        _animator = GetComponentInChildren<Animator>();
     }
 
     private void Update()
     {
-        _inputX = Input.GetAxisRaw("Horizontal");
-        _inputY = Input.GetAxisRaw("Vertical");
+        _change = Vector3.zero;
+        _change.x = Input.GetAxisRaw("Horizontal");
+        _change.y = Input.GetAxisRaw("Vertical");
+
     }
     private void FixedUpdate()
     {
-        Move();
+        if (_change != Vector3.zero)
+        {
+            Move();
+            UpdateAnimations();
+        }
     }
     public void Move()
     {
-        Vector2 move = new Vector2(_inputX, _inputY);
-        move = move.normalized * moveSpeed;
-        _rb.velocity = move;
+        _rb.MovePosition(transform.position + _change.normalized * moveSpeed * Time.fixedDeltaTime);
+    }
+    public void UpdateAnimations()
+    {
+        _animator.SetFloat("moveX", _change.x);
+        _animator.SetFloat("moveY", _change.y);
     }
 }
