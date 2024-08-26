@@ -34,6 +34,10 @@ public class Movement : MonoBehaviour
             Move();
             UpdateAnimations();
         }
+        else
+        {
+            _animator.SetBool("running", false);
+        }
     }
     public void Move()
     {
@@ -43,5 +47,6 @@ public class Movement : MonoBehaviour
     {
         _animator.SetFloat("moveX", _change.x);
         _animator.SetFloat("moveY", _change.y);
+        _animator.SetBool("running", true);
     }
 }
